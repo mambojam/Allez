@@ -1,5 +1,8 @@
+using Application.Services;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,10 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<DataContext>(opt => 
-{
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+// Configure the database context to use SQL Server
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<Seed>();
+builder.Services.AddScoped<IBaseService<Block>, BlockService>();
+builder.Services.AddScoped<IBaseService<Domain.Route>, RouteService>();
+builder.Services.AddScoped<IBaseService<Location>, LocationService>();
+builder.Services.AddScoped<IBaseRepository<Block>, BlockRepository>();
+builder.Services.AddScoped<IBaseRepository<Domain.Route>, RouteRepository>();
+builder.Services.AddScoped<IBaseRepository<Location>, LocationRepository>();
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -30,5 +42,25 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+// Updates the database whenever we run the program
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    var seed = services.GetRequiredService<Seed>();
+    
+
+
+    await context.Database.MigrateAsync(); // Begins a migration
+    await seed.SeedData(context); // Checks to see if the database contains data and seeds data if not
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
 
 app.Run();

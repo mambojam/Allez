@@ -5,23 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-  
-    public class BlocksController : BaseApiController
+ 
+   
+    public class BlocksController: BaseApiController
     {
-        private readonly BlockService _blockService;
-
-        public BlocksController(BlockService service)
+        private readonly IBaseService<Block> _blockService;
+        public BlocksController(IBaseService<Block> blockService) 
         {
-            _blockService = service;
+            _blockService = blockService;
         }
-
         [HttpGet("{id}")]
         public async Task<Block> Get(Guid id)
         {
             return await _blockService.GetAsync(id);
         }
         [HttpGet]
-        public async Task<List<Block>> GetAll(Guid id)
+        public async Task<List<Block>> GetAll()
         {
             return await _blockService.GetAllAsync();
         }
@@ -40,6 +39,5 @@ namespace API.Controllers
         {
             await _blockService.DeleteAsync(id);
         }
-        
     }
 }

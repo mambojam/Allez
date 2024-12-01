@@ -8,12 +8,13 @@ namespace API.Controllers
   
     public class RoutesController : BaseApiController
     {
-        private readonly RouteService _routeService;
+        private readonly IBaseService<Domain.Route> _routeService;
 
-        public RoutesController(RouteService service)
+        public RoutesController(IBaseService<Domain.Route> routeService)
         {
-            _routeService = service;
+            _routeService = routeService;
         }
+    
 
         [HttpGet("{id}")]
         public async Task<Domain.Route> Get(Guid id)
@@ -43,3 +44,5 @@ namespace API.Controllers
         
     }
 }
+
+    
