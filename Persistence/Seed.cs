@@ -1,36 +1,33 @@
-using System.Threading.Tasks.Dataflow;
 using Domain;
-using Microsoft.VisualBasic;
-using Persistence.Repositories;
 
 namespace Persistence
 {
     public class Seed
         {
     //     private readonly IBaseRepository<Location> _locationRepository;
-    //     private readonly IBaseRepository<Block> _blockRepository;
-    //     private readonly IBaseRepository<Route> _routeRepository;
+    //     private readonly IBaseRepository<Boulder> _BoulderRepository;
+    //     private readonly IBaseRepository<Climb> _ClimbRepository;
 
     //     public Seed(
     //     IBaseRepository<Location> locationRepository,
-    //     IBaseRepository<Block> blockRepository,
-    //     IBaseRepository<Route> routeRepository)
+    //     IBaseRepository<Boulder> BoulderRepository,
+    //     IBaseRepository<Climb> ClimbRepository)
     // {
     //     _locationRepository = locationRepository;
-    //     _blockRepository = blockRepository;
-    //     _routeRepository = routeRepository;
+    //     _BoulderRepository = BoulderRepository;
+    //     _ClimbRepository = ClimbRepository;
     // }
         public async Task SeedData(DataContext context)
         {
             if (context.Locations.Any()) return;
 
+            var sirhowyId = Guid.NewGuid().ToString();
+            var bouldersId = Guid.NewGuid().ToString();
+            var flashpointId = Guid.NewGuid().ToString();
 
-            Guid sirhowyId = Guid.NewGuid();
-            Guid bouldersId = Guid.NewGuid();
-            Guid flashpointId = Guid.NewGuid();
+            var seedLocations = new List<Location>();
 
-            var seedLocations = new List<Location>{
-                new Location {
+            var Boulders = new Location {
                     Id = bouldersId,
                     Name = "Boulders",
                     RockType = null,
@@ -44,10 +41,10 @@ namespace Persistence
                     Approach = null,
                     Conditions = null,
                     Address = "St Catherines Park, Cardiff CF24 2RZ",
-                    Blocks = [],
-                    Routes = []
-                },
-                new Location {
+                   
+                };
+                var Sirhowy = new Location 
+                {
                     Id = sirhowyId,
                     Name = "Sirhowy",
                     RockType = "Sandstone",
@@ -57,307 +54,335 @@ namespace Persistence
                     Approach = "From the carpark follow the track towards the farm, as the road bends left and the farmhouse is on the right you'll reach a left turning through a green horse gate. Turn here and continue along the path over the bridge for 150m and you will reach the Sirhowy river briddleway. The crag is just across the bridleway in the trees.",
                     Conditions = "Suffers from seepage. Best on a warm summers day when the trees provide welcome shade. the upper tier can also be a great spot for catching th last of the sun when the nights start drawing in.",
                     Address = "2 Railway Cottages, Wattsville, Crosskeys, Newport NP11 7PU",
-                    Blocks = [],
-                    Routes = []
-                },
+                   
+                };
 
-                new Location {
+                var Flashpoint = new Location {
                     Id = flashpointId,
                     Name = "Flashpoint Cardiff",
                     RockType = null,
                     Style = Style.Bouldering,
                     VenueType = VenueType.Indoor,
-                    Description = "Find us in Freemans Parc in the centre of Cardiff! Climbing centre designed with climbers of all abilities in mind; from new climbers to those looking for incredible training facilities. For those new to climbing and bouldering in Cardiff, we have an amazing community where you can get friendly advice and get to know new friends, or book onto an instructed course. Our routes are changed weekly which means there is always something fresh to try, even for the most dedicated of climbers.",
+                    Description = "Find us in Freemans Parc in the centre of Cardiff! Climbing centre designed with climbers of all abilities in mind; from new climbers to those looking for incredible training facilities. For those new to climbing and bouldering in Cardiff, we have an amazing community where you can get friendly advice and get to know new friends, or book onto an instructed course. Our Climbs are changed weekly which means there is always something fresh to try, even for the most dedicated of climbers.",
                     Approach = null,
                     Conditions = null,
                     Address = "Freemans Parc, 236 Penarth Rd, Cardiff CF11 8EQ",
-                    Blocks = [],
-                    Routes = []
-                }
-        };
+                   
+                };
+        
 
-            var sirhowyRoutes = new List<Route>
+            var sirhowyClimbs = new List<Climb>
         {
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Gott in Himmel",
-            Grade = Route.French.f7a,
-            Description = "A classic and challenging route with interesting holds.",
-            Rating = null,
-            LocationId = sirhowyId // Replace with the actual seeded location GUID
+            Grade = "7a",
+            DisciplineType = "Sport",
+            Description = "A classic and challenging Climb with interesting holds.",
+            Rating = 4.0m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Butcher Heinrich",
-            Grade = Route.French.f7b,
+            Grade = "7b",
+            DisciplineType = "Sport",
             Description = "Sharp and technical climb with delicate moves.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.5m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Strange Little Girl",
-            Grade = Route.French.f6c,
-            Description = "Quirky route with a mix of balance and power.",
-            Rating = null,
-            LocationId = sirhowyId
+            Grade = "6c",
+            DisciplineType = "Sport",
+            Description = "Quirky Climb with a mix of balance and power.",
+            Rating = 5.0m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "'King Ada",
-            Grade = Route.French.f7b,
+            Grade = "7b",
+            DisciplineType = "Sport",
             Description = "Steep overhang with sustained difficulty throughout.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.8m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Skanderbeg",
-            Grade = Route.French.f7b,
+            Grade = "7b",
+            DisciplineType = "Sport",
             Description = "Powerful moves with a rewarding finish.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.5m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Skanderbeg (Direct)",
-            Grade = Route.French.f7bb,
+            Grade = "7b+",
+            DisciplineType = "Sport",
             Description = "Direct variation with extra difficulty on the crux.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.6m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "King Zog",
-            Grade = Route.French.f7aa,
+            Grade = "7a",
+            DisciplineType = "Sport",
             Description = "Technical and demanding with intricate sequences.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.2m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Face",
-            Grade = Route.French.f7bb,
+            Grade = "7b+",
+            DisciplineType = "Sport",
             Description = "A face climb with delicate and intricate moves.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 3.7m,
+            Location = "Sirhowy"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = "Mawr, Mawr, Mawr",
-            Grade = Route.French.f7a,
+            Grade = "7a",
+            DisciplineType = "Sport",
             Description = "A lengthy endurance testpiece with flowing moves.",
-            Rating = null,
-            LocationId = sirhowyId
+            Rating = 4.8m,
+            Location = "Sirhowy"
             }
         };
-        var bouldersRoutes = new List<Route> {
-            new Route
+        var bouldersClimbs = new List<Climb> {
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = null,
-            Grade = Route.French.f7a,
+            Grade = "7a",
+            DisciplineType = "Sport",
             Description = "",
             Rating = null,
-            LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = null,
-            Grade = Route.French.f6a,
+            Grade = "6a",
+            DisciplineType = "Sport",
             Description = "",
             Rating = null,
-            LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = null,
-            Grade = Route.French.f5,
+            Grade = "5a",
+            DisciplineType = "Sport",
             Description = "",
             Rating = null,
-            LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = null,
-            Grade = Route.French.f7b,
+            Grade = "7b",
+            DisciplineType = "Sport",
             Description = "",
             Rating = null,
-            LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Route
+            new Climb
             {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Name = null,
-            Grade = Route.French.f6c,
+            Grade = "6c",
+            DisciplineType = "Sport",
             Description = "",
             Rating = null,
-            LocationId = bouldersId
+            Location = "Boulders"
             }
         };
-        var bouldersBoulders = new List<Block> {
-            new Block {
-                Id = Guid.NewGuid(),
+        var bouldersBoulders = new List<Climb> {
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.VB,
+                Grade = "VB",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V0,
+                Grade = "V0",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V1,
+                Grade = "V1",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V3,
+                Grade = "V3",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V5,
+                Grade = "V5",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V5,
+                Grade = "V5",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V6,
+                Grade = "V6",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V7,
+                Grade = "V7",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = bouldersId
+            Location = "Boulders"
             }
         };
 
-        var flashBlocks = new List<Block> {
-            new Block {
-                Id = Guid.NewGuid(),
+        var flashBoulders = new List<Climb> {
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V7,
+                Grade = "V7",
+                DisciplineType = "Boulder",
                 Description = "",
-                Rating = null,
-                LocationId = flashpointId
+                Rating = 5.0m,
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V7,
+                Grade = "V7",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V6,
+                Grade = "V6",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V6,
+                Grade = "V6",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V5,
+                Grade = "V5",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V5,
+                Grade = "V5",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V4,
+                Grade = "V4",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V4,
+                Grade = "V4",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
-            new Block {
-                Id = Guid.NewGuid(),
+            new Climb {
+                Id = Guid.NewGuid().ToString(),
                 Name = null,
-                Grade = Block.Hueco.V3,
+                Grade = "V3",
+                DisciplineType = "Boulder",
                 Description = "",
                 Rating = null,
-                LocationId = flashpointId
+                Location = "Flashpoint"
             },
         };
         
+            seedLocations.AddRange([Sirhowy, Boulders, Flashpoint]);
             await context.Locations.AddRangeAsync(seedLocations);
-            await context.SaveChangesAsync();
-            Console.WriteLine($"Locations Table finished inserting, location Ids are: \nboulders: {bouldersId}"
-            + $"\nsirhowy: {sirhowyId} \nflashpoint: {flashpointId}");
+            
 
-            await context.Routes.AddRangeAsync(sirhowyRoutes);
-            await context.Routes.AddRangeAsync(bouldersRoutes);
-            await context.Blocks.AddRangeAsync(bouldersBoulders);
-            await context.Blocks.AddRangeAsync(flashBlocks);
+            await context.Climbs.AddRangeAsync(sirhowyClimbs);
+            await context.Climbs.AddRangeAsync(bouldersClimbs);
+            await context.Climbs.AddRangeAsync(bouldersBoulders);
+            await context.Climbs.AddRangeAsync(flashBoulders);
             await context.SaveChangesAsync();
         }
     }

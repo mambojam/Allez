@@ -9,32 +9,14 @@ namespace Persistence
         {
         }
     
-        public DbSet<Block> Blocks { get; set; }
-        public DbSet<Route> Routes { get; set; }
-
+        public DbSet<Climb> Climbs {get; set;}
         public DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Location>()
-                .HasMany(l => l.Blocks)
-                .WithOne(l => l.Location)
-                .HasForeignKey(l => l.LocationId)
-                .IsRequired();
-
-            modelBuilder.Entity<Location>()
-                .HasMany(l => l.Routes)
-                .WithOne(l => l.Location)
-                .HasForeignKey(l => l.LocationId)
-                .IsRequired();
-
-            modelBuilder.Entity<Block>()
+            modelBuilder.Entity<Climb>()
                 .Property(b => b.Rating)
-                .HasColumnType("DECIMAL(3,1)");
-            
-            modelBuilder.Entity<Route>()
-                .Property(b => b.Rating)
-                .HasColumnType("DECIMAL(3,1)");
+                .HasColumnType("DECIMAL(2,1)");
 
             base.OnModelCreating(modelBuilder);
         }

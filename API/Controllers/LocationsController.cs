@@ -1,41 +1,46 @@
-using Application.Services;
+using Application.Locations.Commands;
+using Application.Locations.Queries;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace API.Controllers
 {
     public class LocationsController : BaseApiController
-    {
-       
-        private readonly IBaseService<Location> _locationService;
-        public LocationsController(IBaseService<Location> locationService)
-        {
-            _locationService = locationService;
-        }
-            [HttpGet("{id}")]
-            public async Task<Location> Get(Guid id)
-            {
-                return await _locationService.GetAsync(id);
-            }
+    {       
             [HttpGet]
-            public async Task<List<Location>> GetAll(Guid id)
+            public async Task<ActionResult<List<Location>>> GetLocations()
             {
-                return await _locationService.GetAllAsync();
+                return await Mediator.Send(new GetLocationList.Query());
             }
+            
+            [HttpGet("{id}")]
+            public async Task<ActionResult<Location>> GetLocation(string id)
+            {
+
+                return await Mediator.Send(new GetLocationDetails.Query{Id = id});
+            }
+            
             [HttpPost]
-            public async Task Create(Location location)
+            public async Task<ActionResult<string>> CreateLocation(Location location)
             {
-                await _locationService.CreateAsync(location);
+                return await Mediator.Send(new CreateLocation.Command{Location = location});
             }
-            [HttpPut("{id}")]
-            public async Task Edit(Guid id, Location location)
+
+            [HttpPut]
+            public async Task<ActionResult>  EditLocation(Location location)
             {
-                await _locationService.EditAsync(id, location);
+                await Mediator.Send(new EditLocation.Command{Location = location});
+
+                return NoContent();
             }
             [HttpDelete("{id}")]
-            public async Task Delete(Guid id)
+            public async Task<ActionResult> Delete(string id)
             {
-                await _locationService.DeleteAsync(id);
+                await Mediator.Send(new DeleteLocation.Command{Id = id});
+
+                return NoContent();
             }
             
         }

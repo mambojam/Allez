@@ -1,8 +1,7 @@
-using Application.Services;
-using Domain;
+using Application.Climbs.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,16 +10,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Configure the database context to use SQL Server
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataContext>(options => 
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddScoped<Seed>();
-builder.Services.AddScoped<IBaseService<Block>, BlockService>();
-builder.Services.AddScoped<IBaseService<Domain.Route>, RouteService>();
-builder.Services.AddScoped<IBaseService<Location>, LocationService>();
-builder.Services.AddScoped<IBaseRepository<Block>, BlockRepository>();
-builder.Services.AddScoped<IBaseRepository<Domain.Route>, RouteRepository>();
-builder.Services.AddScoped<IBaseRepository<Location>, LocationRepository>();
+builder.Services.AddCors();
+
+builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<GetClimbList.Handler>());
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+// builder.Services.AddScoped<IBaseService<Boulder>, BoulderService>();
+// builder.Services.AddScoped<IBaseService<Domain.Route>, RouteService>();
+// builder.Services.AddScoped<IBaseService<Location>, LocationService>();
+// builder.Services.AddScoped<IBaseRepository<Boulder>, BoulderRepository>();
+// builder.Services.AddScoped<IBaseRepository<Domain.Route>, RouteRepository>();
+// builder.Services.AddScoped<IBaseRepository<Location>, LocationRepository>();
 
 
 
@@ -37,8 +42,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(x => 
+{
+    x.AllowAnyHeader();
+    x.AllowAnyMethod();
+    x.WithOrigins("http://localhost:3000", "https://localhost:3000");
+});
 
+// Configure the HTTP request pipeline.
 app.UseAuthorization();
 
 app.MapControllers();
@@ -52,8 +63,6 @@ try
     var context = services.GetRequiredService<DataContext>();
     var seed = services.GetRequiredService<Seed>();
     
-
-
     await context.Database.MigrateAsync(); // Begins a migration
     await seed.SeedData(context); // Checks to see if the database contains data and seeds data if not
 }
